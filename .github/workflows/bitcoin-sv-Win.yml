@@ -37,9 +37,7 @@ jobs:
         with:
           vcpkgGitCommitId: master
           vcpkgArguments: '@${{ env.vcpkgResponseFile }}'
-        
-      
-      
+            
       - name: Cloning Bitcoin SV
         env: 
           REPO_URL: https://github.com/bitcoin-sv/bitcoin-sv
