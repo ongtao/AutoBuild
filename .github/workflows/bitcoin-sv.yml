@@ -1,20 +1,25 @@
+name: Build bitcoin-sv
+
 on:
   push:
     branches:    
       - master
-name: Build
+
 jobs:
   test:
     name: Build
     runs-on: macOS-latest
-    strategy:
-        matrix:
-          destination: ['platform=iOS Simulator,OS=12.2,name=iPhone X']
+    
     steps:
       - name: Checkout
         uses: actions/checkout@master
-      - name: Build
+      - name: Initialization environment
         run: |
-          xcodebuild clean build -project MLTontiatorView.xcodeproj -scheme MLTontiatorView-iOS -destination "${destination}" CODE_SIGN_IDENTITY="" CODE_SIGNING_REQUIRED=NO ONLY_ACTIVE_ARCH=NO
+          brew install automake berkeley-db libtool boost openssl pkg-config libevent
         env: 
          destination: ${{ matrix.destination }}
+      - name: Clone source code
+        env: 
+          REPO_URL: https://github.com/bitcoin-sv/bitcoin-sv
+          REPO_BRANCH: master
+        run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH bitcoin-sv
