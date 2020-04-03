@@ -4,7 +4,6 @@ on:
   push:
     branches:    
       - master
-
 jobs:
   test:
     name: Build
@@ -13,13 +12,30 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@master
+        
       - name: Initialization environment
         run: |
+          echo "brew install automake berkeley-db libtool boost openssl pkg-config libevent, please wait ... maybe it will be 10 mins..."
           brew install automake berkeley-db libtool boost openssl pkg-config libevent
         env: 
          destination: ${{ matrix.destination }}
-      - name: Clone source code
+       
+      - name: Clone Source Code ###bitcoin-sv
         env: 
           REPO_URL: https://github.com/bitcoin-sv/bitcoin-sv
           REPO_BRANCH: master
         run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH bitcoin-sv
+        
+      - name: Update & Install feeds
+        working-directory: ./bitcoin-sv
+        run: |
+          cd bitcoin-sv
+          ./autogen.sh
+          ./configure
+          make
+          
+      - name : Upload artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: bitcoin-sv
+          path: bitcoin-sv/build
