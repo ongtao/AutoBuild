@@ -30,6 +30,13 @@ jobs:
           path: ${{ github.workspace }}/vcpkg
           key: vcpkg-${{ hashFiles( env.vcpkgResponseFile ) }}
 
+      - name: run-vcpkg
+        uses: lukka/run-vcpkg@v0.9
+        id: runvcpkg
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          vcpkgGitCommitId: master
+          vcpkgArguments: '@${{ env.vcpkgResponseFile }}'
      
       - name: Cloning Bitcoin SV
         run: git clone https://github.com/bitcoin-sv/bitcoin-sv
