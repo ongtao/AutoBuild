@@ -1,1 +1,66 @@
 
+name: Build bitcoin-sv @windows-latest
+
+on:
+  push:
+    branches:    
+      - master
+jobs:
+  build:
+    name: Build
+    runs-on: windows-latest
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+        
+      - name: Set vcpkg's response file path used as part of cache's key.
+        env:
+          vcpkgResponseFile: ${{ github.workspace }}/vcpkg.txt
+        run: |
+          sed -i 's/VcPkgTriplets/..\\VcPkgTriplets/' $vcpkgResponseFile
+          sed -i 's/=ports/=..\\ports/' $vcpkgResponseFile
+          echo "::set-env name=vcpkgResponseFile::$vcpkgResponseFile"
+        shell: bash
+
+      - name: Cache vcpkg artifacts
+        uses: actions/cache@v1
+        id: cache
+        with:
+          path: ${{ github.workspace }}/vcpkg
+          key: vcpkg-${{ hashFiles( env.vcpkgResponseFile ) }}
+
+      - name: run-vcpkg
+        uses: lukka/run-vcpkg@v0.9
+        id: runvcpkg
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          vcpkgGitCommitId: master
+          vcpkgArguments: '@${{ env.vcpkgResponseFile }}'
+        
+      
+      
+      - name: Cloning Bitcoin SV
+        env: 
+          REPO_URL: https://github.com/bitcoin-sv/bitcoin-sv
+          REPO_BRANCH: master
+        run: git clone $REPO_URL
+        
+      - name: Generating project files
+        working-directory: ./bitcoin-sv
+        run: |
+          mkdir Build
+          pushd Build
+          cmake
+          -G "Visual Studio 15 2017 Win64" \
+          -DVCPKG_TARGET_TRIPLET:STRING="x64-windows-static" \
+          -DCMAKE_INSTALL_PREFIX:PATH="$cur/Dist" \
+          -DCMAKE_TOOLCHAIN_FILE="$cur/vcpkg/scripts/buildsystems/vcpkg.cmake" \
+          -DCMAKE_BUILD_TYPE=Release
+          ..
+          
+      - name : Upload artifact
+        uses: actions/upload-artifact@master
+        with:
+          name: bitcoin-sv
+          path: bitcoin-sv/build
