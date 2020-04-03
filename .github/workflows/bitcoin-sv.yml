@@ -5,7 +5,7 @@ on:
     branches:    
       - master
 jobs:
-  test:
+  build:
     name: Build
     runs-on: macOS-latest
     
