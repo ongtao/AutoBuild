@@ -1,7 +1,7 @@
-# Carson
-
-name: build bitcoin-sv
-
+# Copyright (c) 2019-2020 Luca Cappa
+# Released under the term specified in file LICENSE.txt
+# SPDX short identifier: MIT
+name: hosted-basic-cache-submod_vcpkg
 on: [push]
 
 jobs:
@@ -19,9 +19,8 @@ jobs:
             triplet: x64-linux
           - os: macos-latest
             triplet: x64-osx
-
     steps:
-    - uses: actions/checkout@v1
+      - uses: actions/checkout@v1
         with:
           submodules: true
 
