@@ -19,12 +19,12 @@ jobs:
         env: 
           REPO_URL: https://github.com/bitcoin-sv/bitcoin-sv
           REPO_BRANCH: master
-        run: git clone $REPO_URL
+        run: git clone $REPO_URL bsv
         
       - name: Building Bitcoin SV - Autotools
         working-directory: ./bitcoin-sv
         run: |
-          cd bitcoin-sv
+          cd bsv
           ./autogen.sh
           ./configure
           make
