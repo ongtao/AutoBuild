@@ -39,10 +39,7 @@ jobs:
           vcpkgArguments: '@${{ env.vcpkgResponseFile }}'
             
       - name: Cloning Bitcoin SV
-        env: 
-          REPO_URL: https://github.com/bitcoin-sv/bitcoin-sv
-          REPO_BRANCH: master
-        run: git clone $REPO_URL
+        run: git clone https://github.com/bitcoin-sv/bitcoin-sv
         
       - name: Generating project files
         working-directory: ./bitcoin-sv
