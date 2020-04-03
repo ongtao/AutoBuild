@@ -45,6 +45,7 @@ jobs:
         working-directory: ./bitcoin-sv
         run: |
           cur=$(cygpath -m $(pwd))
+          echo -e "$cur thread build."
           mkdir Build
           pushd Build
           cmake
