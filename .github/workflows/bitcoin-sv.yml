@@ -13,20 +13,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
         
-      - name: Initialization environment
+      - name: Installing dependencies
         run: |
           echo "brew install automake berkeley-db libtool boost openssl pkg-config libevent, please wait ... maybe it will be 10 mins..."
           brew install automake berkeley-db libtool boost openssl pkg-config libevent
         env: 
          destination: ${{ matrix.destination }}
        
-      - name: Clone Source Code ###bitcoin-sv
+      - name: Cloning Bitcoin SV
         env: 
           REPO_URL: https://github.com/bitcoin-sv/bitcoin-sv
           REPO_BRANCH: master
         run: git clone --depth 1 $REPO_URL -b $REPO_BRANCH bitcoin-sv
         
-      - name: Update & Install feeds
+      - name: Building Bitcoin SV - Autotools
         working-directory: ./bitcoin-sv
         run: |
           cd bitcoin-sv
