@@ -1,4 +1,4 @@
-name: Build bitcoin-sv
+name: Build bitcoin-sv @macOS-latest
 
 on:
   push:
@@ -13,7 +13,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@master
         
-     
+      - name: Installing dependencies 🍺
+        run: |
+          echo "brew install automake berkeley-db libtool boost openssl pkg-config libevent, please wait ... maybe it will be 10 mins..."
+          brew install automake berkeley-db libtool boost openssl pkg-config libevent
+        env: 
+         destination: ${{ matrix.destination }}
        
       - name: Cloning Bitcoin SV
         env: 
