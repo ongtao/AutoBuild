@@ -37,12 +37,13 @@ jobs:
       - name: Generating project files
         working-directory: ./bitcoin-sv
         run: |
+          cur=$(cygpath -m $(pwd))
           mkdir Build
           pushd Build
           cmake
           -G "Visual Studio 15 2017 Win64" \
           -DVCPKG_TARGET_TRIPLET:STRING="x64-windows-static" \
-          -DCMAKE_INSTALL_PREFIX:PATH="$cur/Dist" \
+          -DCMAKE_INSTALL_PREFIX:PATH="$cur/Dist" \         
           -DCMAKE_TOOLCHAIN_FILE="$cur/vcpkg/scripts/buildsystems/vcpkg.cmake" \
           -DCMAKE_BUILD_TYPE=Release
           ..
