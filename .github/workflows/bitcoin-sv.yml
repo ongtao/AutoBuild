@@ -2,13 +2,7 @@
 
 name: build bitcoin-sv
 
-on:
- release:
-    types: [published]
-
-  push:
-    branches: 
-      - master
+on: [push]
 
 jobs:
   job:
